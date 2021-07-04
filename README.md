@@ -11,7 +11,7 @@ MOVU64RA        R0, [0x7C50]
 ```
 ## Instructions
 | Instruction Name |Instruction Opcode(hex)| Purpose                                                            |
-| :--------------- | :-------------------: | -----------------------------------------------------------------: |
+| :--------------- | :-------------------: | :----------------------------------------------------------------- |
 | NOP              | 0                     | (None)                                                             |
 | HALT             | 1                     | Stops the emulator/board.                                          |
 | MOVU64RR         | 2                     | Moves an unsigned 64-bit value from a register to another.         |
