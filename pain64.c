@@ -27,6 +27,7 @@ int main(void) {
         ADDRR,
         0,
         1,
+        BREAKPOINT,
         HALT,
     };
     pain64_start(program, sizeof(program));

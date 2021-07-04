@@ -184,6 +184,34 @@ static void _xor_r_v(uint64_t *accumulator, uint64_t value) {
 
 #endif
 
+#ifndef _FOLD_LSH
+
+static void _lsh_r_r(uint64_t *accumulator, uint64_t *base) {
+    *accumulator <<= *base;
+    return;
+}
+
+static void _lsh_r_v(uint64_t *accumulator, uint64_t value) {
+    *accumulator <<= value;
+    return;
+}
+
+#endif
+
+#ifndef _FOLD_RSH
+
+static void _rsh_r_r(uint64_t *accumulator, uint64_t *base) {
+    *accumulator >>= *base;
+    return;
+}
+
+static void _rsh_r_v(uint64_t *accumulator, uint64_t value) {
+    *accumulator >>= value;
+    return;
+}
+
+#endif
+
 #ifndef _FOLD_NOT
 
 static void _not(uint64_t *accumulator) {
@@ -313,10 +341,25 @@ static void _ret(void) {
 
 #endif
 
+#ifndef _FOLD_BREAKPOINT
+
+static void _breakpoint(void) {
+    printf("--- Breakpoint Reached ---\n");
+    printf("R0 = 0x%x\t\tR1 = 0x%x\n", *R0, *R1);
+    printf("R2 = 0x%x\t\tR3 = 0x%x\n", *R2, *R3);
+    printf("R4 = 0x%x\t\tR5 = 0x%x\n", *R4, *R5);
+    printf("R6 = 0x%x\t\tR7 = 0x%x\n", *R6, *R7);
+    printf("IP = 0x%x\t\tFG = 0x%x\n", *IP, *FG);
+    printf("BP = 0x%x\t\tSP = 0x%x\n", *BP, *SP);
+    (void)getchar();
+    return;
+}
+
+#endif
+
 static void _invoke(void) {
     char instruction = *(char *)pain64_resolve_addr(*IP);
     (*IP)++;
-    printf("Instruction: %d\n", instruction);
     switch (instruction) {
     case NOP:
         _nop();
@@ -492,6 +535,38 @@ static void _invoke(void) {
         _xor_r_v(&(registers[d0]), d1);
         break;
     }
+    case LSHRR: {
+        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        (*IP)++;
+        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        (*IP)++;
+        _lsh_r_r(&(registers[d0]), &(registers[d1]));
+        break;
+    }
+    case LSHRV: {
+        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        (*IP)++;
+        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        *(IP) += 8;
+        _lsh_r_v(&(registers[d0]), d1);
+        break;
+    }
+    case RSHRR: {
+        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        (*IP)++;
+        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        (*IP)++;
+        _rsh_r_r(&(registers[d0]), &(registers[d1]));
+        break;
+    }
+    case RSHRV: {
+        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        (*IP)++;
+        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        *(IP) += 8;
+        _rsh_r_v(&(registers[d0]), d1);
+        break;
+    }
     case NOT: {
         const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
         (*IP)++;
@@ -592,6 +667,10 @@ static void _invoke(void) {
         _call_a(d0);
         break;
     }
+    case BREAKPOINT: {
+        _breakpoint();
+        break;
+    }
     case RET:
         _ret();
         break;
@@ -599,14 +678,7 @@ static void _invoke(void) {
 }
 
 static void _on_instruction(void) {
-    printf("R0 = 0x%x\t\tR1 = 0x%x\n", *R0, *R1);
-    printf("R2 = 0x%x\t\tR3 = 0x%x\n", *R2, *R3);
-    printf("R4 = 0x%x\t\tR5 = 0x%x\n", *R4, *R5);
-    printf("R6 = 0x%x\t\tR7 = 0x%x\n", *R6, *R7);
-    printf("IP = 0x%x\t\tFG = 0x%x\n", *IP, *FG);
-    printf("BP = 0x%x\t\tSP = 0x%x\n", *BP, *SP);
     _invoke();
-    getchar();
     return;
 }
 

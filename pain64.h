@@ -36,6 +36,11 @@ enum pain64_instruction {
 
     XORRR,
     XORRV,
+    
+    LSHRR,
+    LSHRV,
+    RSHRR,
+    RSHRV,
 
     NOT,
 
@@ -60,6 +65,7 @@ enum pain64_instruction {
     CALLA,
 
     RET,
+    BREAKPOINT,
 };
 
 void pain64_open_mem(void);
