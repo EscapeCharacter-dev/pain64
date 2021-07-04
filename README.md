@@ -1,5 +1,5 @@
 # Pain64
-A 64-bit ISA written in C.
+A 64-bit little-endian ISA written in C.
 ## Syntax
 The PAIN64 syntax goes like so:  
 ```
