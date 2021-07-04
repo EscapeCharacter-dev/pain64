@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "pain64.h"
 
@@ -45,28 +46,210 @@ static void _nop(void) {
 
 #ifndef _FOLD_MOV
 
-static void _mov_r_v(uint64_t *reg, uint64_t val) {
+static void _mov_u64_r_v(uint64_t *reg, uint64_t val) {
     *reg = val;
     return;
 }
 
-static void _mov_r_r(uint64_t *dest, uint64_t *src) {
+static void _mov_u64_r_r(uint64_t *dest, uint64_t *src) {
     *dest = *src;
     return;
 }
 
-static void _mov_r_a(uint64_t *reg, uint64_t addr) {
-    *reg = *pain64_resolve_addr(addr);
+static void _mov_u64_r_a(uint64_t *reg, uint64_t addr) {
+    *reg = *pain64_resolve_addr_U64(addr);
     return;
 }
 
-static void _mov_a_r(uint64_t *dest_addr, uint64_t *reg) {
-    *pain64_resolve_addr(dest_addr) = *reg;
+static void _mov_u64_a_r(uint64_t dest_addr, uint64_t *reg) {
+    *pain64_resolve_addr_U64(dest_addr) = *reg;
     return;
 }
 
-static void _mov_a_v(uint64_t *dest_addr, uint64_t val) {
-    *pain64_resolve_addr(dest_addr) = val;
+static void _mov_u64_a_v(uint64_t dest_addr, uint64_t val) {
+    *pain64_resolve_addr_U64(dest_addr) = val;
+    return;
+}
+
+
+static void _mov_i64_r_v(uint64_t *reg, int64_t val) {
+    *reg = val;
+    return;
+}
+
+static void _mov_i64_r_r(uint64_t *dest, uint64_t *src) {
+    *dest = *(int64_t *)src;
+    return;
+}
+
+static void _mov_i64_r_a(uint64_t *reg, uint64_t addr) {
+    *reg = *pain64_resolve_addr_I64(addr);
+    return;
+}
+
+static void _mov_i64_a_r(uint64_t dest_addr, uint64_t *reg) {
+    *pain64_resolve_addr_I64(dest_addr) = *reg;
+    return;
+}
+
+static void _mov_i64_a_v(uint64_t dest_addr, int64_t val) {
+    *pain64_resolve_addr_I64(dest_addr) = val;
+    return;
+}
+
+
+static void _mov_u32_r_v(uint64_t *reg, uint32_t val) {
+    *reg = val;
+    return;
+}
+
+static void _mov_u32_r_r(uint64_t *dest, uint64_t *src) {
+    *dest = *(uint32_t *)src;
+    return;
+}
+
+static void _mov_u32_r_a(uint64_t *reg, uint64_t addr) {
+    *reg = *pain64_resolve_addr_U32(addr);
+    return;
+}
+
+static void _mov_u32_a_r(uint64_t dest_addr, uint64_t *reg) {
+    *pain64_resolve_addr_U32(dest_addr) = *reg;
+    return;
+}
+
+static void _mov_u32_a_v(uint64_t dest_addr, uint32_t val) {
+    *pain64_resolve_addr_U32(dest_addr) = val;
+    return;
+}
+
+
+static void _mov_i32_r_v(uint64_t *reg, int32_t val) {
+    *reg = val;
+    return;
+}
+
+static void _mov_i32_r_r(uint64_t *dest, uint64_t *src) {
+    *dest = *(int32_t *)src;
+    return;
+}
+
+static void _mov_i32_r_a(uint64_t *reg, uint64_t addr) {
+    *reg = *pain64_resolve_addr_I32(addr);
+    return;
+}
+
+static void _mov_i32_a_r(uint64_t dest_addr, uint64_t *reg) {
+    *pain64_resolve_addr_I32(dest_addr) = *reg;
+    return;
+}
+
+static void _mov_i32_a_v(int64_t dest_addr, int32_t val) {
+    *pain64_resolve_addr_I32(dest_addr) = val;
+    return;
+}
+
+
+static void _mov_u16_r_v(uint64_t *reg, uint16_t val) {
+    *reg = val;
+    return;
+}
+
+static void _mov_u16_r_r(uint64_t *dest, uint64_t *src) {
+    *dest = *(uint16_t *)src;
+    return;
+}
+
+static void _mov_u16_r_a(uint64_t *reg, uint64_t addr) {
+    *reg = *pain64_resolve_addr_U16(addr);
+    return;
+}
+
+static void _mov_u16_a_r(uint64_t dest_addr, uint64_t *reg) {
+    *pain64_resolve_addr_U16(dest_addr) = *reg;
+    return;
+}
+
+static void _mov_u16_a_v(uint64_t dest_addr, uint16_t val) {
+    *pain64_resolve_addr_U16(dest_addr) = val;
+    return;
+}
+
+
+static void _mov_i16_r_v(uint64_t *reg, int16_t val) {
+    *reg = val;
+    return;
+}
+
+static void _mov_i16_r_r(uint64_t *dest, uint64_t *src) {
+    *dest = *(int16_t *)src;
+    return;
+}
+
+static void _mov_i16_r_a(uint64_t *reg, uint64_t addr) {
+    *reg = *pain64_resolve_addr_I16(addr);
+    return;
+}
+
+static void _mov_i16_a_r(uint64_t dest_addr, uint64_t *reg) {
+    *pain64_resolve_addr_I16(dest_addr) = *reg;
+    return;
+}
+
+static void _mov_i16_a_v(int64_t dest_addr, int16_t val) {
+    *pain64_resolve_addr_I16(dest_addr) = val;
+    return;
+}
+
+
+static void _mov_u8_r_v(uint64_t *reg, uint8_t val) {
+    *reg = val;
+    return;
+}
+
+static void _mov_u8_r_r(uint64_t *dest, uint64_t *src) {
+    *dest = *(uint8_t *)src;
+    return;
+}
+
+static void _mov_u8_r_a(uint64_t *reg, uint64_t addr) {
+    *reg = *pain64_resolve_addr_U8(addr);
+    return;
+}
+
+static void _mov_u8_a_r(uint64_t dest_addr, uint64_t *reg) {
+    *pain64_resolve_addr_U8(dest_addr) = *reg;
+    return;
+}
+
+static void _mov_u8_a_v(uint64_t dest_addr, uint8_t val) {
+    *pain64_resolve_addr_U8(dest_addr) = val;
+    return;
+}
+
+
+static void _mov_i8_r_v(uint64_t *reg, int8_t val) {
+    *reg = val;
+    return;
+}
+
+static void _mov_i8_r_r(uint64_t *dest, uint64_t *src) {
+    *dest = *(int8_t *)src;
+    return;
+}
+
+static void _mov_i8_r_a(uint64_t *reg, uint64_t addr) {
+    *reg = *pain64_resolve_addr_I8(addr);
+    return;
+}
+
+static void _mov_i8_a_r(uint64_t dest_addr, uint64_t *reg) {
+    *pain64_resolve_addr_I8(dest_addr) = *reg;
+    return;
+}
+
+static void _mov_i8_a_v(int64_t dest_addr, int8_t val) {
+    *pain64_resolve_addr_I8(dest_addr) = val;
     return;
 }
 
@@ -280,19 +463,19 @@ static void _jne_a(uint64_t *dest) {
 #ifndef _FOLD_PUSH
 
 static void _push_r(uint64_t *reg) {
-    *pain64_resolve_addr(*SP) = *reg;
+    *pain64_resolve_addr_U64(*SP) = *reg;
     *SP += 8;
     return;
 }
 
 static void _push_v(uint64_t value) {
-    *pain64_resolve_addr(*SP) = value;
+    *pain64_resolve_addr_U64(*SP) = value;
     *SP += 8;
     return;
 }
 
 static void _push_a(uint64_t addr) {
-    *pain64_resolve_addr(*SP) = *pain64_resolve_addr(addr);
+    *pain64_resolve_addr_U64(*SP) = *pain64_resolve_addr_U64(addr);
     *SP += 8;
     return;
 }
@@ -302,13 +485,13 @@ static void _push_a(uint64_t addr) {
 #ifndef _FOLD_POP
 
 static void _pop_r(uint64_t *reg) {
-    *reg = *pain64_resolve_addr(*SP);
+    *reg = *pain64_resolve_addr_U64(*SP);
     *SP -= 8;
     return;
 }
 
 static void _pop_a(uint64_t addr) {
-    *pain64_resolve_addr(addr) = *pain64_resolve_addr(*SP);
+    *pain64_resolve_addr_U64(addr) = *pain64_resolve_addr_U64(*SP);
     *SP -= 8;
     return;
 }
@@ -335,7 +518,7 @@ static void _call_a(uint64_t addr) {
 
 static void _ret(void) {
     _pop_r(IP);
-    _mov_r_r(BP, SP);
+    _mov_u64_r_r(BP, SP);
     return;
 }
 
@@ -351,14 +534,17 @@ static void _breakpoint(void) {
     printf("R6 = 0x%x\t\tR7 = 0x%x\n", *R6, *R7);
     printf("IP = 0x%x\t\tFG = 0x%x\n", *IP, *FG);
     printf("BP = 0x%x\t\tSP = 0x%x\n", *BP, *SP);
+    printf("Press any key to continue execution\n");
     (void)getchar();
     return;
 }
 
 #endif
 
+static int _junk_counter = 0;
+
 static void _invoke(void) {
-    char instruction = *(char *)pain64_resolve_addr(*IP);
+    char instruction = *pain64_resolve_addr_U8(*IP);
     (*IP)++;
     switch (instruction) {
     case NOP:
@@ -367,302 +553,582 @@ static void _invoke(void) {
     case HALT:
         _halt();
         break;
-    case MOVRR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+    case MOVU64RR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        _mov_r_r(&(registers[d0]), &(registers[d1]));
+        _mov_u64_r_r(&(registers[d0]), &(registers[d1]));
         break;
     }
-    case MOVRV: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+    case MOVU64RV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
-        _mov_r_v(&(registers[d0]), d1);
+        _mov_u64_r_v(&(registers[d0]), d1);
         break;
     }
-    case MOVRA: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+    case MOVU64RA: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
-        _mov_r_a(&(registers[d0]), d1);
+        _mov_u64_r_a(&(registers[d0]), d1);
         break;
     }
-    case MOVAR: {
-        const uint64_t d0 = *pain64_resolve_addr(*IP);
+    case MOVU64AR: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        _mov_a_r(d0, &(registers[d1]));
+        _mov_u64_a_r(d0, &(registers[d1]));
         break;
     }
-    case MOVAV: {
-        const uint64_t d0 = *pain64_resolve_addr(*IP);
+    case MOVU64AV: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
-        _mov_a_v(d0, d1);
+        _mov_u64_a_v(d0, d1);
+        break;
+    }
+    case MOVI64RR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_i64_r_r(&(registers[d0]), &(registers[d1]));
+        break;
+    }
+    case MOVI64RV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const int64_t d1 = *pain64_resolve_addr_I64(*IP);
+        (*IP) += 8;
+        _mov_i64_r_v(&(registers[d0]), d1);
+        break;
+    }
+    case MOVI64RA: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        _mov_i64_r_a(&(registers[d0]), d1);
+        break;
+    }
+    case MOVI64AR: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_i64_a_r(d0, &(registers[d1]));
+        break;
+    }
+    case MOVI64AV: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const int64_t d1 = *pain64_resolve_addr_I64(*IP);
+        (*IP) += 8;
+        _mov_i64_a_v(d0, d1);
+        break;
+    }
+    case MOVU32RR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_u32_r_r(&(registers[d0]), &(registers[d1]));
+        break;
+    }
+    case MOVU32RV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint32_t d1 = *pain64_resolve_addr_U32(*IP);
+        (*IP) += 4;
+        _mov_u32_r_v(&(registers[d0]), d1);
+        break;
+    }
+    case MOVU32RA: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        _mov_u32_r_a(&(registers[d0]), d1);
+        break;
+    }
+    case MOVU32AR: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_u32_a_r(d0, &(registers[d1]));
+        break;
+    }
+    case MOVU32AV: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const int64_t d1 = *pain64_resolve_addr_U32(*IP);
+        (*IP) += 4;
+        _mov_u32_a_v(d0, d1);
+        break;
+    }
+    case MOVI32RR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_i32_r_r(&(registers[d0]), &(registers[d1]));
+        break;
+    }
+    case MOVI32RV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const int32_t d1 = *pain64_resolve_addr_I32(*IP);
+        (*IP) += 4;
+        _mov_i32_r_v(&(registers[d0]), d1);
+        break;
+    }
+    case MOVI32RA: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        _mov_i32_r_a(&(registers[d0]), d1);
+        break;
+    }
+    case MOVI32AR: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_i32_a_r(d0, &(registers[d1]));
+        break;
+    }
+    case MOVI32AV: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const int64_t d1 = *pain64_resolve_addr_I32(*IP);
+        (*IP) += 4;
+        _mov_i32_a_v(d0, d1);
+        break;
+    }
+    case MOVU16RR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_u16_r_r(&(registers[d0]), &(registers[d1]));
+        break;
+    }
+    case MOVU16RV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint16_t d1 = *pain64_resolve_addr_U16(*IP);
+        (*IP) += 2;
+        _mov_u16_r_v(&(registers[d0]), d1);
+        break;
+    }
+    case MOVU16RA: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        _mov_u16_r_a(&(registers[d0]), d1);
+        break;
+    }
+    case MOVU16AR: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_u64_a_r(d0, &(registers[d1]));
+        break;
+    }
+    case MOVU16AV: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const uint16_t d1 = *pain64_resolve_addr_U16(*IP);
+        (*IP) += 2;
+        _mov_u16_a_v(d0, d1);
+        break;
+    }
+    case MOVI16RR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_i16_r_r(&(registers[d0]), &(registers[d1]));
+        break;
+    }
+    case MOVI16RV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const int16_t d1 = *pain64_resolve_addr_U16(*IP);
+        (*IP) += 2;
+        _mov_i16_r_v(&(registers[d0]), d1);
+        break;
+    }
+    case MOVI16RA: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        _mov_i16_r_a(&(registers[d0]), d1);
+        break;
+    }
+    case MOVI16AR: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_i16_a_r(d0, &(registers[d1]));
+        break;
+    }
+    case MOVI16AV: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const int16_t d1 = *pain64_resolve_addr_I16(*IP);
+        (*IP) += 2;
+        _mov_i16_a_v(d0, d1);
+        break;
+    }
+    case MOVU8RR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_u8_r_r(&(registers[d0]), &(registers[d1]));
+        break;
+    }
+    case MOVU8RV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_u8_r_v(&(registers[d0]), d1);
+        break;
+    }
+    case MOVU8RA: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        _mov_u8_r_a(&(registers[d0]), d1);
+        break;
+    }
+    case MOVU8AR: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_u8_a_r(d0, &(registers[d1]));
+        break;
+    }
+    case MOVU8AV: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_u8_a_v(d0, d1);
+        break;
+    }
+    case MOVI8RR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_i8_r_r(&(registers[d0]), &(registers[d1]));
+        break;
+    }
+    case MOVI8RV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const int8_t d1 = *pain64_resolve_addr_I8(*IP);
+        (*IP)++;
+        _mov_i8_r_v(&(registers[d0]), d1);
+        break;
+    }
+    case MOVI8RA: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        _mov_i8_r_a(&(registers[d0]), d1);
+        break;
+    }
+    case MOVI8AR: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_i8_a_r(d0, &(registers[d1]));
+        break;
+    }
+    case MOVI8AV: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const int8_t d1 = *pain64_resolve_addr_I8(*IP);
+        (*IP)++;
+        _mov_i8_a_v(d0, d1);
         break;
     }
     case ADDRR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _add_r_r(&(registers[d0]), &(registers[d1]));
         break;
     }
     case ADDRV: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _add_r_v(&(registers[d0]), d1);
         break;
     }
     case SUBRR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _sub_r_r(&(registers[d0]), &(registers[d1]));
         break;
     }
     case SUBRV: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _sub_r_v(&(registers[d0]), d1);
         break;
     }
     case MULRR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _mul_r_r(&(registers[d0]), &(registers[d1]));
         break;
     }
     case MULRV: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _mul_r_v(&(registers[d0]), d1);
         break;
     }
     case DIVRR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _div_r_r(&(registers[d0]), &(registers[d1]));
         break;
     }
     case DIVRV: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _div_r_v(&(registers[d0]), d1);
         break;
     }
     case MODRR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _mod_r_r(&(registers[d0]), &(registers[d1]));
         break;
     }
     case MODRV: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _mod_r_v(&(registers[d0]), d1);
         break;
     }
     case ANDRR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _and_r_r(&(registers[d0]), &(registers[d1]));
         break;
     }
     case ANDRV: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _and_r_v(&(registers[d0]), d1);
         break;
     }
     case ORRR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _or_r_r(&(registers[d0]), &(registers[d1]));
         break;
     }
     case ORRV: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _or_r_v(&(registers[d0]), d1);
         break;
     }
     case XORRR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _xor_r_r(&(registers[d0]), &(registers[d1]));
         break;
     }
     case XORRV: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _xor_r_v(&(registers[d0]), d1);
         break;
     }
     case LSHRR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _lsh_r_r(&(registers[d0]), &(registers[d1]));
         break;
     }
     case LSHRV: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         *(IP) += 8;
         _lsh_r_v(&(registers[d0]), d1);
         break;
     }
     case RSHRR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _rsh_r_r(&(registers[d0]), &(registers[d1]));
         break;
     }
     case RSHRV: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         *(IP) += 8;
         _rsh_r_v(&(registers[d0]), d1);
         break;
     }
     case NOT: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _not(&(registers[d0]));
         break;
     }
     case CMPRR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint8_t d1 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _cmp_r_r(&(registers[d0]), &(registers[d1]));
         break;
     }
     case CMPRV: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr(*IP);
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _cmp_r_v(&(registers[d0]), d1);
         break;
     }
     case JMPR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _jmp_r(&(registers[d0]));
         break;
     }
     case JMPA: {
-        const uint64_t d0 = *pain64_resolve_addr(*IP);
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _jmp_a(d0);
         break;
     }
     case JER: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _je_r(&(registers[d0]));
         break;
     }
     case JEA: {
-        const uint64_t d0 = *pain64_resolve_addr(*IP);
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _je_a(d0);
         break;
     }
     case JNER: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _jne_r(&(registers[d0]));
         break;
     }
     case JNEA: {
-        const uint64_t d0 = *pain64_resolve_addr(*IP);
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _jne_a(d0);
         break;
     }
     case PUSHR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _push_r(&(registers[d0]));
         break;
     }
     case PUSHV: {
-        const uint64_t d0 = *pain64_resolve_addr(*IP);
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _push_v(d0);
         break;
     }
     case PUSHA: {
-        const uint64_t d0 = *pain64_resolve_addr(*IP);
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _push_a(d0);
         break;
     }
     case POPR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _pop_r(&(registers[d0]));
         break;
     }
     case POPA: {
-        const uint64_t d0 = *pain64_resolve_addr(*IP);
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _pop_a(d0);
         break;
     }
     case CALLR: {
-        const uint8_t d0 = *(char *)pain64_resolve_addr(*IP);
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
         _call_r(&(registers[d0]));
         break;
     }
     case CALLA: {
-        const uint64_t d0 = *pain64_resolve_addr(*IP);
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
         _call_a(d0);
         break;
@@ -673,6 +1139,17 @@ static void _invoke(void) {
     }
     case RET:
         _ret();
+        break;
+    default:
+        printf("Unknown junk instruction %d\n", instruction);
+        _junk_counter++;
+        if (_junk_counter == 3) {
+            printf("Fatal number of junk instructions reached.\n");
+            printf("Shutting down..\n");
+            pain64_close_mem();
+            exit(-1);
+        }
+        printf("Note: After three junk instructions executed, PAIN64 crashes.\n");
         break;
     }
 }
