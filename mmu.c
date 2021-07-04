@@ -80,6 +80,14 @@ int8_t *pain64_resolve_addr_I8(uint64_t address) {
     return (int8_t *)(_mem_space + address);
 }
 
+struct pain64_device *pain64_resolve_addr_DEVICE(uint64_t address) {
+    if (_check_addr(address)) {
+        fprintf(stderr, "pain64.mmu(D): Invalid addresss 0x%x\n", address);
+        return 0;
+    }
+    return (struct pain64_device *)(_mem_space + address);
+}
+
 void pain64_close_mem(void) {
     free(_mem_space);
     return;

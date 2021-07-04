@@ -3,6 +3,11 @@
 
 #include <stdint.h>
 
+struct pain64_device {
+    uint64_t    out;
+    uint64_t    in;
+};
+
 enum pain64_instruction {
     NOP,
     HALT,
@@ -104,6 +109,12 @@ enum pain64_instruction {
 
     RET,
     BREAKPOINT,
+
+    OUT,
+    IN,
+
+    INC,
+    DEC,
 };
 
 void pain64_open_mem(void);
@@ -116,6 +127,7 @@ uint16_t *pain64_resolve_addr_U16(uint64_t address);
 int16_t *pain64_resolve_addr_I16(uint64_t address);
 uint8_t *pain64_resolve_addr_U8(uint64_t address);
 int8_t *pain64_resolve_addr_I8(uint64_t address);
+struct pain64_device *pain64_resolve_addr_DEVICE(uint64_t address);
 void pain64_load_program(uint64_t offset, uint8_t *code, size_t code_size);
 void pain64_start(char *program, size_t program_size);
 

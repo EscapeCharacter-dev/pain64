@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "pain64.h"
 
@@ -29,7 +30,7 @@ static int halted = 0;
 
 #ifndef _FOLD_HLT
 
-static void _halt(void) {
+static inline void _halt(void) {
     halted = 1;
     return;
 }
@@ -38,7 +39,7 @@ static void _halt(void) {
 
 #ifndef _FOLD_NOP
 
-static void _nop(void) {
+static inline void _nop(void) {
     return;
 }
 
@@ -46,209 +47,209 @@ static void _nop(void) {
 
 #ifndef _FOLD_MOV
 
-static void _mov_u64_r_v(uint64_t *reg, uint64_t val) {
+static inline void _mov_u64_r_v(uint64_t *reg, uint64_t val) {
     *reg = val;
     return;
 }
 
-static void _mov_u64_r_r(uint64_t *dest, uint64_t *src) {
+static inline void _mov_u64_r_r(uint64_t *dest, uint64_t *src) {
     *dest = *src;
     return;
 }
 
-static void _mov_u64_r_a(uint64_t *reg, uint64_t addr) {
+static inline void _mov_u64_r_a(uint64_t *reg, uint64_t addr) {
     *reg = *pain64_resolve_addr_U64(addr);
     return;
 }
 
-static void _mov_u64_a_r(uint64_t dest_addr, uint64_t *reg) {
+static inline void _mov_u64_a_r(uint64_t dest_addr, uint64_t *reg) {
     *pain64_resolve_addr_U64(dest_addr) = *reg;
     return;
 }
 
-static void _mov_u64_a_v(uint64_t dest_addr, uint64_t val) {
+static inline void _mov_u64_a_v(uint64_t dest_addr, uint64_t val) {
     *pain64_resolve_addr_U64(dest_addr) = val;
     return;
 }
 
 
-static void _mov_i64_r_v(uint64_t *reg, int64_t val) {
+static inline void _mov_i64_r_v(uint64_t *reg, int64_t val) {
     *reg = val;
     return;
 }
 
-static void _mov_i64_r_r(uint64_t *dest, uint64_t *src) {
+static inline void _mov_i64_r_r(uint64_t *dest, uint64_t *src) {
     *dest = *(int64_t *)src;
     return;
 }
 
-static void _mov_i64_r_a(uint64_t *reg, uint64_t addr) {
+static inline void _mov_i64_r_a(uint64_t *reg, uint64_t addr) {
     *reg = *pain64_resolve_addr_I64(addr);
     return;
 }
 
-static void _mov_i64_a_r(uint64_t dest_addr, uint64_t *reg) {
+static inline void _mov_i64_a_r(uint64_t dest_addr, uint64_t *reg) {
     *pain64_resolve_addr_I64(dest_addr) = *reg;
     return;
 }
 
-static void _mov_i64_a_v(uint64_t dest_addr, int64_t val) {
+static inline void _mov_i64_a_v(uint64_t dest_addr, int64_t val) {
     *pain64_resolve_addr_I64(dest_addr) = val;
     return;
 }
 
 
-static void _mov_u32_r_v(uint64_t *reg, uint32_t val) {
+static inline void _mov_u32_r_v(uint64_t *reg, uint32_t val) {
     *reg = val;
     return;
 }
 
-static void _mov_u32_r_r(uint64_t *dest, uint64_t *src) {
+static inline void _mov_u32_r_r(uint64_t *dest, uint64_t *src) {
     *dest = *(uint32_t *)src;
     return;
 }
 
-static void _mov_u32_r_a(uint64_t *reg, uint64_t addr) {
+static inline void _mov_u32_r_a(uint64_t *reg, uint64_t addr) {
     *reg = *pain64_resolve_addr_U32(addr);
     return;
 }
 
-static void _mov_u32_a_r(uint64_t dest_addr, uint64_t *reg) {
+static inline void _mov_u32_a_r(uint64_t dest_addr, uint64_t *reg) {
     *pain64_resolve_addr_U32(dest_addr) = *reg;
     return;
 }
 
-static void _mov_u32_a_v(uint64_t dest_addr, uint32_t val) {
+static inline void _mov_u32_a_v(uint64_t dest_addr, uint32_t val) {
     *pain64_resolve_addr_U32(dest_addr) = val;
     return;
 }
 
 
-static void _mov_i32_r_v(uint64_t *reg, int32_t val) {
+static inline void _mov_i32_r_v(uint64_t *reg, int32_t val) {
     *reg = val;
     return;
 }
 
-static void _mov_i32_r_r(uint64_t *dest, uint64_t *src) {
+static inline void _mov_i32_r_r(uint64_t *dest, uint64_t *src) {
     *dest = *(int32_t *)src;
     return;
 }
 
-static void _mov_i32_r_a(uint64_t *reg, uint64_t addr) {
+static inline void _mov_i32_r_a(uint64_t *reg, uint64_t addr) {
     *reg = *pain64_resolve_addr_I32(addr);
     return;
 }
 
-static void _mov_i32_a_r(uint64_t dest_addr, uint64_t *reg) {
+static inline void _mov_i32_a_r(uint64_t dest_addr, uint64_t *reg) {
     *pain64_resolve_addr_I32(dest_addr) = *reg;
     return;
 }
 
-static void _mov_i32_a_v(int64_t dest_addr, int32_t val) {
+static inline void _mov_i32_a_v(int64_t dest_addr, int32_t val) {
     *pain64_resolve_addr_I32(dest_addr) = val;
     return;
 }
 
 
-static void _mov_u16_r_v(uint64_t *reg, uint16_t val) {
+static inline void _mov_u16_r_v(uint64_t *reg, uint16_t val) {
     *reg = val;
     return;
 }
 
-static void _mov_u16_r_r(uint64_t *dest, uint64_t *src) {
+static inline void _mov_u16_r_r(uint64_t *dest, uint64_t *src) {
     *dest = *(uint16_t *)src;
     return;
 }
 
-static void _mov_u16_r_a(uint64_t *reg, uint64_t addr) {
+static inline void _mov_u16_r_a(uint64_t *reg, uint64_t addr) {
     *reg = *pain64_resolve_addr_U16(addr);
     return;
 }
 
-static void _mov_u16_a_r(uint64_t dest_addr, uint64_t *reg) {
+static inline void _mov_u16_a_r(uint64_t dest_addr, uint64_t *reg) {
     *pain64_resolve_addr_U16(dest_addr) = *reg;
     return;
 }
 
-static void _mov_u16_a_v(uint64_t dest_addr, uint16_t val) {
+static inline void _mov_u16_a_v(uint64_t dest_addr, uint16_t val) {
     *pain64_resolve_addr_U16(dest_addr) = val;
     return;
 }
 
 
-static void _mov_i16_r_v(uint64_t *reg, int16_t val) {
+static inline void _mov_i16_r_v(uint64_t *reg, int16_t val) {
     *reg = val;
     return;
 }
 
-static void _mov_i16_r_r(uint64_t *dest, uint64_t *src) {
+static inline void _mov_i16_r_r(uint64_t *dest, uint64_t *src) {
     *dest = *(int16_t *)src;
     return;
 }
 
-static void _mov_i16_r_a(uint64_t *reg, uint64_t addr) {
+static inline void _mov_i16_r_a(uint64_t *reg, uint64_t addr) {
     *reg = *pain64_resolve_addr_I16(addr);
     return;
 }
 
-static void _mov_i16_a_r(uint64_t dest_addr, uint64_t *reg) {
+static inline void _mov_i16_a_r(uint64_t dest_addr, uint64_t *reg) {
     *pain64_resolve_addr_I16(dest_addr) = *reg;
     return;
 }
 
-static void _mov_i16_a_v(int64_t dest_addr, int16_t val) {
+static inline void _mov_i16_a_v(int64_t dest_addr, int16_t val) {
     *pain64_resolve_addr_I16(dest_addr) = val;
     return;
 }
 
 
-static void _mov_u8_r_v(uint64_t *reg, uint8_t val) {
+static inline void _mov_u8_r_v(uint64_t *reg, uint8_t val) {
     *reg = val;
     return;
 }
 
-static void _mov_u8_r_r(uint64_t *dest, uint64_t *src) {
+static inline void _mov_u8_r_r(uint64_t *dest, uint64_t *src) {
     *dest = *(uint8_t *)src;
     return;
 }
 
-static void _mov_u8_r_a(uint64_t *reg, uint64_t addr) {
+static inline void _mov_u8_r_a(uint64_t *reg, uint64_t addr) {
     *reg = *pain64_resolve_addr_U8(addr);
     return;
 }
 
-static void _mov_u8_a_r(uint64_t dest_addr, uint64_t *reg) {
+static inline void _mov_u8_a_r(uint64_t dest_addr, uint64_t *reg) {
     *pain64_resolve_addr_U8(dest_addr) = *reg;
     return;
 }
 
-static void _mov_u8_a_v(uint64_t dest_addr, uint8_t val) {
+static inline void _mov_u8_a_v(uint64_t dest_addr, uint8_t val) {
     *pain64_resolve_addr_U8(dest_addr) = val;
     return;
 }
 
 
-static void _mov_i8_r_v(uint64_t *reg, int8_t val) {
+static inline void _mov_i8_r_v(uint64_t *reg, int8_t val) {
     *reg = val;
     return;
 }
 
-static void _mov_i8_r_r(uint64_t *dest, uint64_t *src) {
+static inline void _mov_i8_r_r(uint64_t *dest, uint64_t *src) {
     *dest = *(int8_t *)src;
     return;
 }
 
-static void _mov_i8_r_a(uint64_t *reg, uint64_t addr) {
+static inline void _mov_i8_r_a(uint64_t *reg, uint64_t addr) {
     *reg = *pain64_resolve_addr_I8(addr);
     return;
 }
 
-static void _mov_i8_a_r(uint64_t dest_addr, uint64_t *reg) {
+static inline void _mov_i8_a_r(uint64_t dest_addr, uint64_t *reg) {
     *pain64_resolve_addr_I8(dest_addr) = *reg;
     return;
 }
 
-static void _mov_i8_a_v(int64_t dest_addr, int8_t val) {
+static inline void _mov_i8_a_v(int64_t dest_addr, int8_t val) {
     *pain64_resolve_addr_I8(dest_addr) = val;
     return;
 }
@@ -257,12 +258,12 @@ static void _mov_i8_a_v(int64_t dest_addr, int8_t val) {
 
 #ifndef _FOLD_ADD
 
-static void _add_r_r(uint64_t *accumulator, uint64_t *base) {
+static inline void _add_r_r(uint64_t *accumulator, uint64_t *base) {
     *accumulator += *base;
     return;
 }
 
-static void _add_r_v(uint64_t *accumulator, uint64_t value) {
+static inline void _add_r_v(uint64_t *accumulator, uint64_t value) {
     *accumulator += value;
     return;
 }
@@ -271,12 +272,12 @@ static void _add_r_v(uint64_t *accumulator, uint64_t value) {
 
 #ifndef _FOLD_SUB
 
-static void _sub_r_r(uint64_t *accumulator, uint64_t *base) {
+static inline void _sub_r_r(uint64_t *accumulator, uint64_t *base) {
     *accumulator -= *base;
     return;
 }
 
-static void _sub_r_v(uint64_t *accumulator, uint64_t value) {
+static inline void _sub_r_v(uint64_t *accumulator, uint64_t value) {
     *accumulator -= value;
     return;
 }
@@ -285,12 +286,12 @@ static void _sub_r_v(uint64_t *accumulator, uint64_t value) {
 
 #ifndef _FOLD_MUL
 
-static void _mul_r_r(uint64_t *accumulator, uint64_t *base) {
+static inline void _mul_r_r(uint64_t *accumulator, uint64_t *base) {
     *accumulator *= *base;
     return;
 }
 
-static void _mul_r_v(uint64_t *accumulator, uint64_t value) {
+static inline void _mul_r_v(uint64_t *accumulator, uint64_t value) {
     *accumulator *= value;
     return;
 }
@@ -299,12 +300,12 @@ static void _mul_r_v(uint64_t *accumulator, uint64_t value) {
 
 #ifndef _FOLD_DIV
 
-static void _div_r_r(uint64_t *accumulator, uint64_t *base) {
+static inline void _div_r_r(uint64_t *accumulator, uint64_t *base) {
     *accumulator /= *base;
     return;
 }
 
-static void _div_r_v(uint64_t *accumulator, uint64_t value) {
+static inline void _div_r_v(uint64_t *accumulator, uint64_t value) {
     *accumulator /= value;
     return;
 }
@@ -313,12 +314,12 @@ static void _div_r_v(uint64_t *accumulator, uint64_t value) {
 
 #ifndef _FOLD_MOD
 
-static void _mod_r_r(uint64_t *accumulator, uint64_t *base) {
+static inline void _mod_r_r(uint64_t *accumulator, uint64_t *base) {
     *accumulator %= *base;
     return;
 }
 
-static void _mod_r_v(uint64_t *accumulator, uint64_t value) {
+static inline void _mod_r_v(uint64_t *accumulator, uint64_t value) {
     *accumulator %= value;
     return;
 }
@@ -327,12 +328,12 @@ static void _mod_r_v(uint64_t *accumulator, uint64_t value) {
 
 #ifndef _FOLD_AND
 
-static void _and_r_r(uint64_t *accumulator, uint64_t *base) {
+static inline void _and_r_r(uint64_t *accumulator, uint64_t *base) {
     *accumulator &= *base;
     return;
 }
 
-static void _and_r_v(uint64_t *accumulator, uint64_t value) {
+static inline void _and_r_v(uint64_t *accumulator, uint64_t value) {
     *accumulator &= value;
     return;
 }
@@ -341,12 +342,12 @@ static void _and_r_v(uint64_t *accumulator, uint64_t value) {
 
 #ifndef _FOLD_OR
 
-static void _or_r_r(uint64_t *accumulator, uint64_t *base) {
+static inline void _or_r_r(uint64_t *accumulator, uint64_t *base) {
     *accumulator |= *base;
     return;
 }
 
-static void _or_r_v(uint64_t *accumulator, uint64_t value) {
+static inline void _or_r_v(uint64_t *accumulator, uint64_t value) {
     *accumulator |= value;
     return;
 }
@@ -355,12 +356,12 @@ static void _or_r_v(uint64_t *accumulator, uint64_t value) {
 
 #ifndef _FOLD_XOR
 
-static void _xor_r_r(uint64_t *accumulator, uint64_t *base) {
+static inline void _xor_r_r(uint64_t *accumulator, uint64_t *base) {
     *accumulator ^= *base;
     return;
 }
 
-static void _xor_r_v(uint64_t *accumulator, uint64_t value) {
+static inline void _xor_r_v(uint64_t *accumulator, uint64_t value) {
     *accumulator ^= value;
     return;
 }
@@ -369,12 +370,12 @@ static void _xor_r_v(uint64_t *accumulator, uint64_t value) {
 
 #ifndef _FOLD_LSH
 
-static void _lsh_r_r(uint64_t *accumulator, uint64_t *base) {
+static inline void _lsh_r_r(uint64_t *accumulator, uint64_t *base) {
     *accumulator <<= *base;
     return;
 }
 
-static void _lsh_r_v(uint64_t *accumulator, uint64_t value) {
+static inline void _lsh_r_v(uint64_t *accumulator, uint64_t value) {
     *accumulator <<= value;
     return;
 }
@@ -383,12 +384,12 @@ static void _lsh_r_v(uint64_t *accumulator, uint64_t value) {
 
 #ifndef _FOLD_RSH
 
-static void _rsh_r_r(uint64_t *accumulator, uint64_t *base) {
+static inline void _rsh_r_r(uint64_t *accumulator, uint64_t *base) {
     *accumulator >>= *base;
     return;
 }
 
-static void _rsh_r_v(uint64_t *accumulator, uint64_t value) {
+static inline void _rsh_r_v(uint64_t *accumulator, uint64_t value) {
     *accumulator >>= value;
     return;
 }
@@ -397,7 +398,7 @@ static void _rsh_r_v(uint64_t *accumulator, uint64_t value) {
 
 #ifndef _FOLD_NOT
 
-static void _not(uint64_t *accumulator) {
+static inline void _not(uint64_t *accumulator) {
     *accumulator = ~(*accumulator);
     return;
 }
@@ -406,12 +407,12 @@ static void _not(uint64_t *accumulator) {
 
 #ifndef _FOLD_CMP
 
-static void _cmp_r_r(uint64_t *accumulator, uint64_t *base) {
+static inline void _cmp_r_r(uint64_t *accumulator, uint64_t *base) {
     *accumulator = *accumulator == *base ? 0 : *accumulator < *base ? 1 : 2;
     return;
 }
 
-static void _cmp_r_v(uint64_t *accumulator, uint64_t value) {
+static inline void _cmp_r_v(uint64_t *accumulator, uint64_t value) {
     *accumulator = *accumulator == value ? 0 : *accumulator < value ? 1 : 2;
     return;
 }
@@ -420,12 +421,12 @@ static void _cmp_r_v(uint64_t *accumulator, uint64_t value) {
 
 #ifndef _FOLD_JMP
 
-static void _jmp_r(uint64_t *dest) {
+static inline void _jmp_r(uint64_t *dest) {
     *IP = *dest;
     return;
 }
 
-static void _jmp_a(uint64_t *dest) {
+static inline void _jmp_a(uint64_t *dest) {
     *IP = (uint64_t)dest;
     return;
 }
@@ -434,12 +435,12 @@ static void _jmp_a(uint64_t *dest) {
 
 #ifndef _FOLD_JE
 
-static void _je_r(uint64_t *dest) {
+static inline void _je_r(uint64_t *dest) {
     *IP = *R0 == 0 ? *dest : *IP;
     return;
 }
 
-static void _je_a(uint64_t *dest) {
+static inline void _je_a(uint64_t *dest) {
     *IP = *R0 == 0 ? (uint64_t)dest : *IP;
     return;
 }
@@ -448,12 +449,12 @@ static void _je_a(uint64_t *dest) {
 
 #ifndef _FOLD_JNE
 
-static void _jne_r(uint64_t *dest) {
+static inline void _jne_r(uint64_t *dest) {
     *IP = *R0 != 0 ? *dest : *IP;
     return;
 }
 
-static void _jne_a(uint64_t *dest) {
+static inline void _jne_a(uint64_t *dest) {
     *IP = *R0 != 0 ? (uint64_t)dest : *IP;
     return;
 }
@@ -462,19 +463,19 @@ static void _jne_a(uint64_t *dest) {
 
 #ifndef _FOLD_PUSH
 
-static void _push_r(uint64_t *reg) {
+static inline void _push_r(uint64_t *reg) {
     *pain64_resolve_addr_U64(*SP) = *reg;
     *SP += 8;
     return;
 }
 
-static void _push_v(uint64_t value) {
+static inline void _push_v(uint64_t value) {
     *pain64_resolve_addr_U64(*SP) = value;
     *SP += 8;
     return;
 }
 
-static void _push_a(uint64_t addr) {
+static inline void _push_a(uint64_t addr) {
     *pain64_resolve_addr_U64(*SP) = *pain64_resolve_addr_U64(addr);
     *SP += 8;
     return;
@@ -484,13 +485,13 @@ static void _push_a(uint64_t addr) {
 
 #ifndef _FOLD_POP
 
-static void _pop_r(uint64_t *reg) {
+static inline void _pop_r(uint64_t *reg) {
     *reg = *pain64_resolve_addr_U64(*SP);
     *SP -= 8;
     return;
 }
 
-static void _pop_a(uint64_t addr) {
+static inline void _pop_a(uint64_t addr) {
     *pain64_resolve_addr_U64(addr) = *pain64_resolve_addr_U64(*SP);
     *SP -= 8;
     return;
@@ -500,13 +501,13 @@ static void _pop_a(uint64_t addr) {
 
 #ifndef _FOLD_CALL
 
-static void _call_r(uint64_t *reg) {
+static inline void _call_r(uint64_t *reg) {
     _push_r(IP);
     _jmp_r(reg);
     return;
 }
 
-static void _call_a(uint64_t addr) {
+static inline void _call_a(uint64_t addr) {
     _push_r(IP);
     _jmp_a(addr);
     return;
@@ -516,9 +517,9 @@ static void _call_a(uint64_t addr) {
 
 #ifndef _FOLD_RET
 
-static void _ret(void) {
-    _pop_r(IP);
+static inline void _ret(void) {
     _mov_u64_r_r(BP, SP);
+    _pop_r(IP);
     return;
 }
 
@@ -526,7 +527,7 @@ static void _ret(void) {
 
 #ifndef _FOLD_BREAKPOINT
 
-static void _breakpoint(void) {
+static inline void _breakpoint(void) {
     printf("--- Breakpoint Reached ---\n");
     printf("R0 = 0x%x\t\tR1 = 0x%x\n", *R0, *R1);
     printf("R2 = 0x%x\t\tR3 = 0x%x\n", *R2, *R3);
@@ -536,6 +537,72 @@ static void _breakpoint(void) {
     printf("BP = 0x%x\t\tSP = 0x%x\n", *BP, *SP);
     printf("Press any key to continue execution\n");
     (void)getchar();
+    return;
+}
+
+#endif
+
+#ifndef _FOLD_OUT
+
+static inline void _out(void) {
+    struct pain64_device *device = pain64_resolve_addr_DEVICE(*R7);
+    switch (*R7) {
+    case 0: // D:NULL
+        break; // READONLY
+    case 1: // D:STDIO
+        putchar(*(char *)R6);
+        break;
+    case 2: // D:RAND
+        break; // READONLY
+    case 3: // D:PUTS
+        puts((const char *)*R6);
+        break;
+    default: // D:(custom)
+        _call_a(device->out);
+        break;
+    }
+}
+
+#endif
+
+#ifndef _FOLD_IN
+
+static inline void _in(void) {
+    struct pain64_device *device = pain64_resolve_addr_DEVICE(*R7);
+    switch (*R7) {
+    case 0: // D:NULL
+        *R6 = 0;
+        break;
+    case 1: // D:STDIO
+        *R6 = getchar();
+        break;
+    case 2: // D:RAND
+        *R6 = rand();
+        break;
+    case 3: // D:PUTS
+        *R6 = UINT64_MAX;
+        break; // WRITEONLY
+    default: // D:(custom)
+        _call_a(device->in);
+        break;
+    }
+}
+
+#endif
+
+#ifndef _FOLD_INC
+
+static inline void _inc(uint64_t *reg) {
+    (*reg)++;
+    return;
+}
+
+#endif
+
+#ifndef _FOLD_DEC
+
+static inline void _dec(uint64_t *reg) {
+    (*reg)--;
     return;
 }
 
@@ -1137,6 +1204,24 @@ static void _invoke(void) {
         _breakpoint();
         break;
     }
+    case OUT:
+        _out();
+        break;
+    case IN:
+        _in();
+        break;
+    case INC: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _inc(&(registers[d0]));
+        break;
+    }
+    case DEC: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _dec(&(registers[d0]));
+        break;
+    }
     case RET:
         _ret();
         break;
@@ -1163,8 +1248,11 @@ void pain64_start(char *program, size_t program_size) {
     memset(registers, 0, sizeof(registers));
     pain64_open_mem();
     *IP = 0x7C00;
+    *BP = 0x0040;
+    *SP = 0x0040;
     pain64_load_program(0x7C00, program, program_size);
-    while (!halted) _on_instruction();
+    while (!halted)
+        _on_instruction();
     pain64_close_mem();
     return;
 }
