@@ -26,9 +26,6 @@ void pain64_close_mem(void) {
 }
 
 void pain64_load_program(uint64_t offset, uint8_t *code, size_t code_size) {
-    printf("0x%x\n", (_mem_space + offset));
-    printf("0x%x\n", code);
-    printf("0x%x\n", code_size);
     memcpy((char *)(_mem_space + offset), code, code_size);
     return;
 }
