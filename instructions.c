@@ -317,7 +317,6 @@ static void _invoke(void) {
     char instruction = *(char *)pain64_resolve_addr(*IP);
     (*IP)++;
     printf("Instruction: %d\n", instruction);
-    printf("\n");
     switch (instruction) {
     case NOP:
         _nop();
