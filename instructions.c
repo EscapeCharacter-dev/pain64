@@ -317,9 +317,6 @@ static void _invoke(void) {
     char instruction = *(char *)pain64_resolve_addr(*IP);
     (*IP)++;
     printf("Instruction: %d\n", instruction);
-    printf("Follow-up: ");
-    for (int i = 0; i < 32; i++)
-        printf("0x%x ", *(char *)pain64_resolve_addr(*IP + i));
     printf("\n");
     switch (instruction) {
     case NOP:
@@ -619,8 +616,6 @@ void pain64_start(char *program, size_t program_size) {
     pain64_open_mem();
     *IP = 0x7C00;
     pain64_load_program(0x7C00, program, program_size);
-    for (int i = 0; i < 32; i++)
-        printf("0x%x ", *(char *)pain64_resolve_addr(*IP + i));
     while (!halted) _on_instruction();
     pain64_close_mem();
     return;
