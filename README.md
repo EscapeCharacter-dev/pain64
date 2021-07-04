@@ -92,3 +92,7 @@ MOVU64RA        R0, [0x7C50]
 | CALLA            | 3C                    | Same as CALLR, but the address is fed as an instruction operand.   |
 | RET              | 3D                    | Pops the address on the stack, then jumps to this address.         |
 | BREAKPOINT       | 3E                    | Causes a breakpoint, displays registers and waits for user input.  |
+| OUT              | 3F                    | Sends data to a device port.                                       |
+| IN               | 40                    | Polls data from a device port.                                     |
+| INC              | 41                    | Increments a register.                                             |
+| DEC              | 42                    | Decrements a register.                                             |
