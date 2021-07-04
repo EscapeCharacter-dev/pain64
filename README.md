@@ -74,7 +74,7 @@ MOVU64RA        R0, [0x7C50]
 | LSHRV            | 35                    | Performs a binary left shift with a register and an unsigned 64-bit value. |
 | RSHRR            | 36                    | Performs a binary right shift with two registers.                  |
 | RSHRV            | 37                    | Performs a binary right shift with a register and an unsigned 64-bit value. |
-| NOP              | 38                    | Performs a binary not on a register.                               |
+| NOT              | 38                    | Performs a binary not on a register.                               |
 | CMPRR            | 39                    | Compares two registers. If A < B then 1, if A == B then 2, else 0. |
 | CMPRV            | 3A                    | Compares a register and a value. Check table entry for CMPRR.      |
 | JMPR             | 3B                    | Jumps at an address in a register.                                 |
