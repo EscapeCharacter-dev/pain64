@@ -63,3 +63,5 @@ A 64-bit ISA written in C.
 | XORRV            | 39                    | Performs a XOR gate to a register and an unsigned 64-bit value.  |
 | LSHRR            | 34                    | Performs a binary left shift with two registers.                 |
 | LSHRV            | 35                    | Performs a binary left shift with a register and an unsigned 64-bit value. |
+| RSHRR            | 36                    | Performs a binary right shift with two registers.                |
+| RSHRV            | 37                    | Performs a binary right shift with a register and an unsigned 64-bit value. |
