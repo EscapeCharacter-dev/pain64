@@ -4,16 +4,13 @@
 
 int main(void) {
     char program[] = {
-        MOVU8RV,
-        0,
-        0x34,
-        MOVU8RV,
-        1,
-        0x34,
-        ADDRR,
-        0,
-        1,
         BREAKPOINT,
+        MOVU16RV,
+        0x00,
+        0x00,
+        0x7C,
+        JMPR,
+        0x00,
         HALT,
     };
     pain64_start(program, sizeof(program));

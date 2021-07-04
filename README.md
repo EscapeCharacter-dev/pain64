@@ -1,5 +1,14 @@
 # Pain64
 A 64-bit ISA written in C.
+## Syntax
+The PAIN64 syntax goes like so:  
+```
+INSTRUCTION     DEST, SOURCE
+```  
+For example, MOVU64RA:  
+```
+MOVU64RA        R0, [0x7C50]
+```
 ## Instructions
 | Instruction Name |Instruction Opcode(hex)| Purpose                                                            |
 | :--------------- | :-------------------: | -----------------------------------------------------------------: |
