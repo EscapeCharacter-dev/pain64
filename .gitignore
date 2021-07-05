@@ -2,3 +2,8 @@
 *.obj
 *.elf
 *.o
+SDL2
+*.dll
+*.lib
+*.so
+*.a
