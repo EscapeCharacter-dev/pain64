@@ -5,9 +5,9 @@ The PAIN64 syntax goes like so:
 ```
 INSTRUCTION     DEST, SOURCE
 ```  
-For example, MOVU64RA:  
+For example, MOV64RA:  
 ```
-MOVU64RA        R0, [0x7C50]
+MOV64RA         R0, [0x7C50]
 ```
 ## Instructions
 | Instruction Name |Instruction Opcode(hex)| Purpose                                                            |
