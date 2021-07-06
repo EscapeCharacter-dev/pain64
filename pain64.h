@@ -107,6 +107,18 @@ enum pain64_instruction {
 
     INC,
     DEC,
+
+    FADDRR,
+    FADDRV,
+
+    FSUBRR,
+    FSUBRV,
+
+    FMULRR,
+    FMULRV,
+
+    FDIVRR,
+    FDIVRV,
 };
 
 typedef float       float32_t;

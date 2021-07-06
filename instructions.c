@@ -224,6 +224,16 @@ static inline void _add_r_v(uint64_t *accumulator, uint64_t value) {
     return;
 }
 
+static inline void _fadd_r_r(float64_t *accumulator, float64_t *base) {
+    *accumulator += *base;
+    return;
+}
+
+static inline void _fadd_r_v(float64_t *accumulator, float64_t value) {
+    *accumulator += value;
+    return;
+}
+
 #endif
 
 #ifndef _FOLD_SUB
@@ -234,6 +244,16 @@ static inline void _sub_r_r(uint64_t *accumulator, uint64_t *base) {
 }
 
 static inline void _sub_r_v(uint64_t *accumulator, uint64_t value) {
+    *accumulator -= value;
+    return;
+}
+
+static inline void _fsub_r_r(float64_t *accumulator, float64_t *base) {
+    *accumulator -= *base;
+    return;
+}
+
+static inline void _fsub_r_v(float64_t *accumulator, float64_t value) {
     *accumulator -= value;
     return;
 }
@@ -252,6 +272,16 @@ static inline void _mul_r_v(uint64_t *accumulator, uint64_t value) {
     return;
 }
 
+static inline void _fmul_r_r(float64_t *accumulator, float64_t *base) {
+    *accumulator *= *base;
+    return;
+}
+
+static inline void _fmul_r_v(float64_t *accumulator, float64_t value) {
+    *accumulator *= value;
+    return;
+}
+
 #endif
 
 #ifndef _FOLD_DIV
@@ -262,6 +292,16 @@ static inline void _div_r_r(uint64_t *accumulator, uint64_t *base) {
 }
 
 static inline void _div_r_v(uint64_t *accumulator, uint64_t value) {
+    *accumulator /= value;
+    return;
+}
+
+static inline void _div_r_r(float64_t *accumulator, float64_t *base) {
+    *accumulator /= *base;
+    return;
+}
+
+static inline void _div_r_v(float64_t *accumulator, float64_t value) {
     *accumulator /= value;
     return;
 }
@@ -588,7 +628,7 @@ static void _invoke(void) {
     case FMOV64RV: {
         const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint64_t d1 = *pain64_resolve_addr_F64(*IP);
+        const float64_t d1 = *pain64_resolve_addr_F64(*IP);
         (*IP) += 8;
         _mov_f64_r_v(&(fregisters[d0]), d1);
         break;
@@ -612,7 +652,7 @@ static void _invoke(void) {
     case FMOV64AV: {
         const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
-        const uint64_t d1 = *pain64_resolve_addr_F64(*IP);
+        const float64_t d1 = *pain64_resolve_addr_F64(*IP);
         (*IP) += 8;
         _mov_f64_a_v(d0, d1);
         break;
@@ -628,7 +668,7 @@ static void _invoke(void) {
     case FMOV32RV: {
         const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;
-        const uint32_t d1 = *pain64_resolve_addr_F32(*IP);
+        const float32_t d1 = *pain64_resolve_addr_F32(*IP);
         (*IP) += 4;
         _mov_f32_r_v(&(fregisters[d0]), d1);
         break;
@@ -652,7 +692,7 @@ static void _invoke(void) {
     case FMOV32AV: {
         const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
-        const int64_t d1 = *pain64_resolve_addr_F32(*IP);
+        const float32_t d1 = *pain64_resolve_addr_F32(*IP);
         (*IP) += 4;
         _mov_f32_a_v(d0, d1);
         break;
@@ -733,7 +773,7 @@ static void _invoke(void) {
     case MOV32AV: {
         const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
         (*IP) += 8;
-        const int64_t d1 = *pain64_resolve_addr_U32(*IP);
+        const uint32_t d1 = *pain64_resolve_addr_U32(*IP);
         (*IP) += 4;
         _mov_u32_a_v(d0, d1);
         break;
@@ -834,6 +874,72 @@ static void _invoke(void) {
         _add_r_v(&(registers[d0]), d1);
         break;
     }
+
+    case FADDRR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _fadd_r_r(&(fregisters[d0]), &(fregisters[d1]));
+        break;
+    }
+    case FADDRV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const float64_t d1 = *pain64_resolve_addr_F64(*IP);
+        (*IP) += 8;
+        _fadd_r_v(&(fregisters[d0]), d1);
+        break;
+    }
+    case FSUBRR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _fsub_r_r(&(fregisters[d0]), &(fregisters[d1]));
+        break;
+    }
+    case FSUBRV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const float64_t d1 = *pain64_resolve_addr_F64(*IP);
+        (*IP) += 8;
+        _fsub_r_v(&(fregisters[d0]), d1);
+        break;
+    }
+    case FMULRR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _fmul_r_r(&(fregisters[d0]), &(fregisters[d1]));
+        break;
+    }
+    case FMULRV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const float64_t d1 = *pain64_resolve_addr_F64(*IP);
+        (*IP) += 8;
+        _fmul_r_v(&(fregisters[d0]), d1);
+        break;
+    }
+    case FDIVRR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _fdiv_r_r(&(fregisters[d0]), &(fregisters[d1]));
+        break;
+    }
+    case FDIVRV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const float64_t d1 = *pain64_resolve_addr_F64(*IP);
+        (*IP) += 8;
+        _fdiv_r_v(&(fregisters[d0]), d1);
+        break;
+    }
+
     case SUBRR: {
         const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;

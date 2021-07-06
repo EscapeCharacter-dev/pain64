@@ -53,7 +53,7 @@ MOV64RA         R0, [0x7C50]
 | DIVRR            | 26                    | Divides two registers together.                                    |
 | DIVRV            | 27                    | Divides a register and an unsigned 64-bit value. (remainder)       |
 | MODRR            | 28                    | Divides two registers together. (remainder)                        |
-| MODRV            | 29                    | Divides a register and an unsigned 64-bit value. (remainder)       |
+| MODRV            | 29                    | Divides a register and an unsigned 64-bit value.                   |
 | ANDRR            | 2A                    | Performs an AND gate to two registers.                             |
 | ANDRV            | 2B                    | Performs an AND gate to a register and an unsigned 64-bit value.   |
 | ORRR             | 2C                    | Performs an OR gate to two registers.                              |
@@ -86,3 +86,11 @@ MOV64RA         R0, [0x7C50]
 | IN               | 47                    | Polls data from a device port.                                     |
 | INC              | 48                    | Increments a register.                                             |
 | DEC              | 49                    | Decrements a register.                                             |
+| FADDRR           | 4A                    | Adds two registers together.                                       |
+| FADDRV           | 4B                    | Adds a register and a floating 64-bit value.                       |
+| FSUBRR           | 4C                    | Subtracts two registers together.                                  |
+| FSUBRV           | 4D                    | Subtracts a register and a floating 64-bit value.                  |
+| FMULRR           | 4E                    | Multiplies two registers together.                                 |
+| FMULRV           | 4F                    | Multiplies a register and a floating 64-bit value.                 |
+| FDIVRR           | 50                    | Divides two registers together.                                    |
+| FDIVRV           | 51                    | Divides a register and a floating 64-bit value.                    |
