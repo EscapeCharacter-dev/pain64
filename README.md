@@ -23,7 +23,7 @@ MOV64RA         R0, [0x7C50]
 | MOV32RV          | 8                     | Moves an unsigned 32-bit value to a register.                      |
 | MOV32RA          | 9                     | Moves an unsigned 32-bit value stored in memory to a register.     |
 | MOV32AR          | A                     | Moves an unsigned 32-bit value from a register to memory.          |
-| MOV32AV          | B                    | Moves an unsigned 32-bit value to memory.                          |
+| MOV32AV          | B                    | Moves an unsigned 32-bit value to memory.                           |
 | MOV16RR          | C                     | Moves an unsigned 16-bit value from a register to another.         |
 | MOV16RV          | D                     | Moves an unsigned 16-bit value to a register.                      |
 | MOV16RA          | E                     | Moves an unsigned 16-bit value stored in memory to a register.     |
@@ -34,45 +34,55 @@ MOV64RA         R0, [0x7C50]
 | MOV8RA           | 13                    | Moves an unsigned 8-bit value stored in memory to a register.      |
 | MOV8AR           | 14                    | Moves an unsigned 8-bit value from a register to memory.           |
 | MOV8AV           | 15                    | Moves an unsigned 8-bit value to memory.                           |
-| ADDRR            | 16                    | Adds two registers together.                                       |
-| ADDRV            | 17                    | Adds a register and an unsigned 64-bit value.                      |
-| SUBRR            | 18                    | Subtracts two registers together.                                  |
-| SUBRV            | 19                    | Subtracts a register and an unsigned 64-bit value.                 |
-| MULRR            | 1A                    | Multiplies two registers together.                                 |
-| MULRV            | 1B                    | Multiplies a register and an unsigned 64-bit value.                |
-| DIVRR            | 1C                    | Divides two registers together.                                    |
-| DIVRV            | 1D                    | Divides a register and an unsigned 64-bit value. (remainder)       |
-| MODRR            | 1E                    | Divides two registers together. (remainder)                        |
-| MODRV            | 1F                    | Divides a register and an unsigned 64-bit value. (remainder)       |
-| ANDRR            | 20                    | Performs an AND gate to two registers.                             |
-| ANDRV            | 21                    | Performs an AND gate to a register and an unsigned 64-bit value.   |
-| ORRR             | 22                    | Performs an OR gate to two registers.                              |
-| ORRV             | 23                    | Performs an OR gate to a register and an unsigned 64-bit value.    |
-| XORRR            | 24                    | Performs a XOR gate to two registers.                              |
-| XORRV            | 25                    | Performs a XOR gate to a register and an unsigned 64-bit value.    |
-| LSHRR            | 26                    | Performs a binary left shift with two registers.                   |
-| LSHRV            | 27                    | Performs a binary left shift with a register and an unsigned 64-bit value. |
-| RSHRR            | 28                    | Performs a binary right shift with two registers.                  |
-| RSHRV            | 29                    | Performs a binary right shift with a register and an unsigned 64-bit value. |
-| NOT              | 2A                    | Performs a binary not on a register.                               |
-| CMPRR            | 2B                    | Compares two registers. If A < B then 1, if A == B then 2, else 0. |
-| CMPRV            | 2C                    | Compares a register and a value. Check table entry for CMPRR.      |
-| JMPR             | 2D                    | Jumps at an address in a register.                                 |
-| JMPA             | 2E                    | Jumps to an address.                                               |
-| JER              | 2F                    | Jumps at an address in a register if R0 == 0.                      |
-| JEA              | 30                    | Jumps to an address if R0 == 0.                                    |
-| JNER             | 31                    | Jumps at an address in a register if R0 != 0.                      |
-| JNEA             | 32                    | Jumps to an address if R0 != 0.                                    |
-| PUSHR            | 33                    | Push a value in a register to the stack.                           |
-| PUSHV            | 34                    | Push a value to the stack.                                         |
-| PUSHA            | 35                    | Push a value in memory to the stack.                               |
-| POPR             | 36                    | Pops a value from the stack into a register.                       |
-| POPA             | 37                    | Pops a value from the stack into memory.                           |
-| CALLR            | 38                    | Pushes the address for the next instruction, then jumps into the address stored in a register. |
-| CALLA            | 39                    | Same as CALLR, but the address is fed as an instruction operand.   |
-| RET              | 3A                    | Pops the address on the stack, then jumps to this address.         |
-| BREAKPOINT       | 3B                    | Causes a breakpoint, displays registers and waits for user input.  |
-| OUT              | 3C                    | Sends data to a device port.                                       |
-| IN               | 3D                    | Polls data from a device port.                                     |
-| INC              | 3E                    | Increments a register.                                             |
-| DEC              | 3F                    | Decrements a register.                                             |
+| FMOV64RR         | 16                    | Moves a floating 64-bit value from a register to another.          |
+| FMOV64RV         | 17                    | Moves a floating 64-bit value to a register.                       |
+| FMOV64RA         | 18                    | Moves a floating 64-bit value stored in memory to a register.      |
+| FMOV64AR         | 19                    | Moves a floating 64-bit value from a register to memory.           |
+| FMOV64AV         | 1A                    | Moves a floating 64-bit value to memory.                           |
+| FMOV32RR         | 1B                    | Moves a floating 32-bit value from a register to another.          |
+| FMOV32RV         | 1C                    | Moves a floating 32-bit value to a register.                       |
+| FMOV32RA         | 1D                    | Moves a floating 32-bit value stored in memory to a register.      |
+| FMOV32AR         | 1E                    | Moves a floating 32-bit value from a register to memory.           |
+| FMOV32AV         | 1F                    | Moves a floating 32-bit value to memory.                           |
+| ADDRR            | 20                    | Adds two registers together.                                       |
+| ADDRV            | 21                    | Adds a register and an unsigned 64-bit value.                      |
+| SUBRR            | 22                    | Subtracts two registers together.                                  |
+| SUBRV            | 23                    | Subtracts a register and an unsigned 64-bit value.                 |
+| MULRR            | 24                    | Multiplies two registers together.                                 |
+| MULRV            | 25                    | Multiplies a register and an unsigned 64-bit value.                |
+| DIVRR            | 26                    | Divides two registers together.                                    |
+| DIVRV            | 27                    | Divides a register and an unsigned 64-bit value. (remainder)       |
+| MODRR            | 28                    | Divides two registers together. (remainder)                        |
+| MODRV            | 29                    | Divides a register and an unsigned 64-bit value. (remainder)       |
+| ANDRR            | 2A                    | Performs an AND gate to two registers.                             |
+| ANDRV            | 2B                    | Performs an AND gate to a register and an unsigned 64-bit value.   |
+| ORRR             | 2C                    | Performs an OR gate to two registers.                              |
+| ORRV             | 2D                    | Performs an OR gate to a register and an unsigned 64-bit value.    |
+| XORRR            | 2E                    | Performs a XOR gate to two registers.                              |
+| XORRV            | 2F                    | Performs a XOR gate to a register and an unsigned 64-bit value.    |
+| LSHRR            | 30                    | Performs a binary left shift with two registers.                   |
+| LSHRV            | 31                    | Performs a binary left shift with a register and an unsigned 64-bit value. |
+| RSHRR            | 32                    | Performs a binary right shift with two registers.                  |
+| RSHRV            | 33                    | Performs a binary right shift with a register and an unsigned 64-bit value. |
+| NOT              | 34                    | Performs a binary not on a register.                               |
+| CMPRR            | 35                    | Compares two registers. If A < B then 1, if A == B then 2, else 0. |
+| CMPRV            | 36                    | Compares a register and a value. Check table entry for CMPRR.      |
+| JMPR             | 37                    | Jumps at an address in a register.                                 |
+| JMPA             | 38                    | Jumps to an address.                                               |
+| JER              | 39                    | Jumps at an address in a register if R0 == 0.                      |
+| JEA              | 3A                    | Jumps to an address if R0 == 0.                                    |
+| JNER             | 3B                    | Jumps at an address in a register if R0 != 0.                      |
+| JNEA             | 3C                    | Jumps to an address if R0 != 0.                                    |
+| PUSHR            | 3D                    | Push a value in a register to the stack.                           |
+| PUSHV            | 3E                    | Push a value to the stack.                                         |
+| PUSHA            | 3F                    | Push a value in memory to the stack.                               |
+| POPR             | 40                    | Pops a value from the stack into a register.                       |
+| POPA             | 41                    | Pops a value from the stack into memory.                           |
+| CALLR            | 42                    | Pushes the address for the next instruction, then jumps into the address stored in a register. |
+| CALLA            | 43                    | Same as CALLR, but the address is fed as an instruction operand.   |
+| RET              | 44                    | Pops the address on the stack, then jumps to this address.         |
+| BREAKPOINT       | 45                    | Causes a breakpoint, displays registers and waits for user input.  |
+| OUT              | 46                    | Sends data to a device port.                                       |
+| IN               | 47                    | Polls data from a device port.                                     |
+| INC              | 48                    | Increments a register.                                             |
+| DEC              | 49                    | Decrements a register.                                             |

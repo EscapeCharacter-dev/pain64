@@ -9,6 +9,9 @@
 // 16 registers ought to be enough
 static uint64_t	registers[16];
 
+// 8 64-bit floating point registers
+static float64_t fregisters[8];
+
 /* General purpose registers */
 uint64_t *const R0 = &(registers[0]);
 uint64_t *const R1 = &(registers[1]);
@@ -25,6 +28,15 @@ uint64_t *const SP = &(registers[10]);  // Top Stack Pointer (gets incremented a
 /* Misc */
 uint64_t *const FG = &(registers[11]);  // Flag register
 
+/* General purpose floating-point registers */
+float64_t *const F0 = &(fregisters[0]);
+float64_t *const F1 = &(fregisters[1]);
+float64_t *const F2 = &(fregisters[2]);
+float64_t *const F3 = &(fregisters[3]);
+float64_t *const F4 = &(fregisters[4]);
+float64_t *const F5 = &(fregisters[5]);
+float64_t *const F6 = &(fregisters[6]);
+float64_t *const F7 = &(fregisters[7]);
 
 static int halted = 0;
 
@@ -46,6 +58,54 @@ static inline void _nop(void) {
 #endif
 
 #ifndef _FOLD_MOV
+
+static inline void _mov_f64_r_v(float64_t *reg, float64_t val) {
+    *reg = val;
+    return;
+}
+
+static inline void _mov_f64_r_r(float64_t *dest, float64_t *src) {
+    *dest = *src;
+    return;
+}
+
+static inline void _mov_f64_r_a(float64_t *dest, uint64_t addr) {
+    *dest = *pain64_resolve_addr_F64(addr);
+    return;
+}
+
+static inline void _mov_f64_a_r(uint64_t dest, float64_t *reg) {
+    *pain64_resolve_addr_F64(dest) = *reg;
+    return;
+}
+
+static inline void _mov_f64_a_v(uint64_t dest, float64_t value) {
+    *pain64_resolve_addr_F64(dest) = value;
+}
+
+static inline void _mov_f32_r_v(float64_t *reg, float32_t val) {
+    *reg = val;
+    return;
+}
+
+static inline void _mov_f32_r_r(float64_t *dest, float64_t *src) {
+    *dest = *(float32_t *)src;
+    return;
+}
+
+static inline void _mov_f32_r_a(float64_t *dest, uint64_t addr) {
+    *dest = *pain64_resolve_addr_F32(addr);
+    return;
+}
+
+static inline void _mov_f32_a_r(uint64_t dest, float64_t *reg) {
+    *pain64_resolve_addr_F32(dest) = *reg;
+    return;
+}
+
+static inline void _mov_f32_a_v(uint64_t dest, float32_t value) {
+    *pain64_resolve_addr_F32(dest) = value;
+}
 
 static inline void _mov_u64_r_v(uint64_t *reg, uint64_t val) {
     *reg = val;
@@ -516,6 +576,88 @@ static void _invoke(void) {
     case HALT:
         _halt();
         break;
+
+    case FMOV64RR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_f64_r_r(&(fregisters[d0]), &(fregisters[d1]));
+        break;
+    }
+    case FMOV64RV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint64_t d1 = *pain64_resolve_addr_F64(*IP);
+        (*IP) += 8;
+        _mov_f64_r_v(&(fregisters[d0]), d1);
+        break;
+    }
+    case FMOV64RA: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        _mov_f64_r_a(&(fregisters[d0]), d1);
+        break;
+    }
+    case FMOV64AR: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_f64_a_r(d0, &(fregisters[d1]));
+        break;
+    }
+    case FMOV64AV: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const uint64_t d1 = *pain64_resolve_addr_F64(*IP);
+        (*IP) += 8;
+        _mov_f64_a_v(d0, d1);
+        break;
+    }
+    case FMOV32RR: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_f32_r_r(&(fregisters[d0]), &(fregisters[d1]));
+        break;
+    }
+    case FMOV32RV: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint32_t d1 = *pain64_resolve_addr_F32(*IP);
+        (*IP) += 4;
+        _mov_f32_r_v(&(fregisters[d0]), d1);
+        break;
+    }
+    case FMOV32RA: {
+        const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        const uint64_t d1 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        _mov_f32_r_a(&(fregisters[d0]), d1);
+        break;
+    }
+    case FMOV32AR: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const uint8_t d1 = *pain64_resolve_addr_U8(*IP);
+        (*IP)++;
+        _mov_f32_a_r(d0, &(fregisters[d1]));
+        break;
+    }
+    case FMOV32AV: {
+        const uint64_t d0 = *pain64_resolve_addr_U64(*IP);
+        (*IP) += 8;
+        const int64_t d1 = *pain64_resolve_addr_F32(*IP);
+        (*IP) += 4;
+        _mov_f32_a_v(d0, d1);
+        break;
+    }
+
     case MOV64RR: {
         const uint8_t d0 = *pain64_resolve_addr_U8(*IP);
         (*IP)++;

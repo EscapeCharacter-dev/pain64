@@ -36,6 +36,18 @@ enum pain64_instruction {
     MOV8AR,
     MOV8AV,
 
+    FMOV64RR,
+    FMOV64RV,
+    FMOV64RA,
+    FMOV64AR,
+    FMOV64AV,
+
+    FMOV32RR,
+    FMOV32RV,
+    FMOV32RA,
+    FMOV32AR,
+    FMOV32AV,
+
     ADDRR,
     ADDRV,
 
@@ -97,8 +109,13 @@ enum pain64_instruction {
     DEC,
 };
 
+typedef float       float32_t;
+typedef long double float64_t;
+
 void pain64_open_mem(void);
 void pain64_close_mem(void);
+float64_t *pain64_resolve_addr_F64(uint64_t address);
+float32_t *pain64_resolve_addr_F32(uint64_t address);
 uint64_t *pain64_resolve_addr_U64(uint64_t address);
 int64_t *pain64_resolve_addr_I64(uint64_t address);
 uint32_t *pain64_resolve_addr_U32(uint64_t address);

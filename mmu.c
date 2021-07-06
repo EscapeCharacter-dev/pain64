@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "pain64.h"
 
 static uint8_t *_mem_space;
 
@@ -14,6 +15,22 @@ void pain64_open_mem(void) {
 
 static inline int _check_addr(uint64_t address) {
     return address >= MEM_SPACE || address == 0;
+}
+
+float64_t *pain64_resolve_addr_F64(uint64_t address) {
+    if (_check_addr(address)) {
+        fprintf(stderr, "pain64.mmu(F64): Invalid addresss 0x%x\n", address);
+        return 0;
+    }
+    return (float64_t *)(_mem_space + address);
+}
+
+float32_t *pain64_resolve_addr_F32(uint64_t address) {
+    if (_check_addr(address)) {
+        fprintf(stderr, "pain64.mmu(F32): Invalid addresss 0x%x\n", address);
+        return 0;
+    }
+    return (float32_t *)(_mem_space + address);
 }
 
 uint64_t *pain64_resolve_addr_U64(uint64_t address) {
