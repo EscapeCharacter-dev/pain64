@@ -453,16 +453,6 @@ static inline void _out(void) {
     case 3: // D:PUTS
         puts((const char *)*R6);
         break;
-    case 4: // D:SCREEN
-        switch (*R6) {
-        case 0: // D:SCREEN:OPEN
-            pain64_dm_open(*R5, *R4);
-            break;
-        case 1: // D:SCREEN:DRAW
-            pain64_dm_draw(*R5, *R4, *R3, *R2);
-            break;
-        }
-        break;
     default: // D:(custom)
         _call_a(device->out);
         break;
@@ -988,16 +978,13 @@ static void _invoke(void) {
 void pain64_start(char *program, size_t program_size) {
     memset(registers, 0, sizeof(registers));
     pain64_open_mem();
-    pain64_dm_init();
     *IP = 0x7C00;
     *BP = 0x0040;
     *SP = 0x0040;
     pain64_load_program(0x7C00, program, program_size);
     while (!halted) {
         _invoke();
-        pain64_dm_paint();
     }
     pain64_close_mem();
-    pain64_dm_free();
     return;
 }

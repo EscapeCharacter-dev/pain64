@@ -110,10 +110,5 @@ int8_t *pain64_resolve_addr_I8(uint64_t address);
 struct pain64_device *pain64_resolve_addr_DEVICE(uint64_t address);
 void pain64_load_program(uint64_t offset, uint8_t *code, size_t code_size);
 void pain64_start(char *program, size_t program_size);
-void pain64_dm_init(void);
-void pain64_dm_free(void);
-void pain64_dm_open(uint8_t id, uint64_t packet);
-void pain64_dm_paint(void);
-void pain64_dm_draw(int id, uint32_t color, uint32_t x, uint32_t y);
 
 #endif
