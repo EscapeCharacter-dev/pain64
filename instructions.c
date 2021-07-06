@@ -296,12 +296,12 @@ static inline void _div_r_v(uint64_t *accumulator, uint64_t value) {
     return;
 }
 
-static inline void _div_r_r(float64_t *accumulator, float64_t *base) {
+static inline void _fdiv_r_r(float64_t *accumulator, float64_t *base) {
     *accumulator /= *base;
     return;
 }
 
-static inline void _div_r_v(float64_t *accumulator, float64_t value) {
+static inline void _fdiv_r_v(float64_t *accumulator, float64_t value) {
     *accumulator /= value;
     return;
 }
